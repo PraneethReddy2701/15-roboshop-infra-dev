@@ -1,9 +1,9 @@
 locals {
-  vpc_id = data.aws_ssm_parameter.vpc_id
-  private_subnet_ids = split(",",data.aws_ssm_parameter.private_subnet_ids)
-  backend-alb_sg_id = data.aws_ssm_parameter.backend-alb_sg_id
+  vpc_id = data.aws_ssm_parameter.vpc_id.value
+  private_subnet_ids = split(",",data.aws_ssm_parameter.private_subnet_ids.value)
+  backend-alb_sg_id = data.aws_ssm_parameter.backend-alb_sg_id.value
 
-  
+
   common_tags = {
     Project = var.project
     Environment = var.environment
