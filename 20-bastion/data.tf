@@ -31,6 +31,6 @@ data "aws_ssm_parameter" "private_subnet_ids" {
   name = "/${var.project}/${var.environment}/private_subnet_ids"
 }
 
-data "aws_ssm_parameter" "databse_subnet_ids" {
-  name = "/${var.project}/${var.environment}/databse_subnet_ids"
+data "aws_ssm_parameter" "database_subnet_ids" {
+  name = "/${var.project}/${var.environment}/database_subnet_ids"
 }
