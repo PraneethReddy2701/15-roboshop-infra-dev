@@ -35,3 +35,11 @@ variable "backend-alb_sg_name" {
 variable "backend-alb_sg_description" {
     default = "this security group is created for backend-alb"  
 }
+
+variable "vpn_sg_name" {
+  default = "vpn"
+}
+
+variable "vpn_sg_description" {
+    default = "this security group is created for vpn"  
+}
