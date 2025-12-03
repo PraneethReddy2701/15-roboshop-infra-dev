@@ -116,3 +116,113 @@ resource "aws_security_group_rule" "backend-alb_vpn" {
   source_security_group_id = module.vpn.sg_id
   security_group_id = module.backend-alb.sg_id
 }
+
+# security group for mongodb
+module "mongodb" {
+  source = "git::https://github.com/PraneethReddy2701/16-terraform-aws-security-group-module.git?ref=main"
+  project = var.project
+  environment = var.environment
+
+  sg_name        = var.mongodb_sg_name
+  sg_description = var.mongodb_sg_description
+  vpc_id = local.vpc_id
+}
+
+
+# # mongodb accepting connections from vpn on port 22, 27017
+# #ssh 22
+# resource "aws_security_group_rule" "mongodb_vpn_ssh" {
+#   type              = "ingress"
+#   from_port         = 22
+#   to_port           = 22
+#   protocol          = "tcp"
+#   source_security_group_id = module.vpn.sg_id
+#   security_group_id = module.mongodb.sg_id
+# }
+
+# #27017
+# resource "aws_security_group_rule" "mongodb_vpn" {
+#   type              = "ingress"
+#   from_port         = 27017
+#   to_port           = 27017
+#   protocol          = "tcp"
+#   source_security_group_id = module.vpn.sg_id
+#   security_group_id = module.mongodb.sg_id
+# }
+
+# mongodb accepting connections from vpn on port 22, 27017
+resource "aws_security_group_rule" "mongodb_vpn_ssh" {
+  count = length(var.mongodb_vpn_ports)
+  type              = "ingress"
+  from_port         = var.mongodb_vpn_ports[count.index]
+  to_port           = var.mongodb_vpn_ports[count.index]
+  protocol          = "tcp"
+  source_security_group_id = module.vpn.sg_id
+  security_group_id = module.mongodb.sg_id
+}
+
+# security group for redis
+module "redis" {
+  source = "git::https://github.com/PraneethReddy2701/16-terraform-aws-security-group-module.git?ref=main"
+  project = var.project
+  environment = var.environment
+
+  sg_name        = var.redis_sg_name
+  sg_description = var.redis_sg_description
+  vpc_id = local.vpc_id
+}
+
+# redis accepting connections from vpn on port 22, 6379
+resource "aws_security_group_rule" "redis_vpn_ssh" {
+  count = length(var.redis_vpn_ports)
+  type              = "ingress"
+  from_port         = var.redis_vpn_ports[count.index]
+  to_port           = var.redis_vpn_ports[count.index]
+  protocol          = "tcp"
+  source_security_group_id = module.vpn.sg_id
+  security_group_id = module.redis.sg_id
+}
+
+# security group for mysql
+module "mysql" {
+  source = "git::https://github.com/PraneethReddy2701/16-terraform-aws-security-group-module.git?ref=main"
+  project = var.project
+  environment = var.environment
+
+  sg_name        = var.mysql_sg_name
+  sg_description = var.mysql_sg_description
+  vpc_id = local.vpc_id
+}
+
+# mysql accepting connections from vpn on port 22, 3306
+resource "aws_security_group_rule" "mysql_vpn_ssh" {
+  count = length(var.mysql_vpn_ports)
+  type              = "ingress"
+  from_port         = var.mysql_vpn_ports[count.index]
+  to_port           = var.mysql_vpn_ports[count.index]
+  protocol          = "tcp"
+  source_security_group_id = module.vpn.sg_id
+  security_group_id = module.mysql.sg_id
+}
+
+# security group for rabbitmq
+module "rabbitmq" {
+  source = "git::https://github.com/PraneethReddy2701/16-terraform-aws-security-group-module.git?ref=main"
+  project = var.project
+  environment = var.environment
+
+  sg_name        = var.rabbitmq_sg_name
+  sg_description = var.rabbitmq_sg_description
+  vpc_id = local.vpc_id
+}
+
+# rabbitmq accepting connections from vpn on port 22, 5672
+resource "aws_security_group_rule" "rabbitmq_vpn_ssh" {
+  count = length(var.rabbitmq_vpn_ports)
+  type              = "ingress"
+  from_port         = var.rabbitmq_vpn_ports[count.index]
+  to_port           = var.rabbitmq_vpn_ports[count.index]
+  protocol          = "tcp"
+  source_security_group_id = module.vpn.sg_id
+  security_group_id = module.rabbitmq.sg_id
+}

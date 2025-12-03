@@ -43,3 +43,51 @@ variable "vpn_sg_name" {
 variable "vpn_sg_description" {
     default = "this security group is created for vpn"  
 }
+
+variable "mongodb_sg_name" {
+  default = "mongodb"
+}
+
+variable "mongodb_sg_description" {
+    default = "this security group is created for mongodb"  
+}
+
+variable "mongodb_vpn_ports" {
+  default = [22, 27017]  
+}
+
+variable "redis_sg_name" {
+  default = "redis"
+}
+
+variable "redis_sg_description" {
+    default = "this security group is created for redis"  
+}
+
+variable "redis_vpn_ports" {
+  default = [22, 6379]  
+}
+
+variable "mysql_sg_name" {
+  default = "mysql"
+}
+
+variable "mysql_sg_description" {
+    default = "this security group is created for mysql"  
+}
+
+variable "mysql_vpn_ports" {
+  default = [22, 3306]  
+}
+
+variable "rabbitmq_sg_name" {
+  default = "rabbitmq"
+}
+
+variable "rabbitmq_sg_description" {
+    default = "this security group is created for rabbitmq"  
+}
+
+variable "rabbitmq_vpn_ports" {
+  default = [22, 5672]  
+}

@@ -1,10 +1,10 @@
-data "aws_ami" "ourami"{
-    owners = ["973714476881"]
+data "aws_ami" "openvpn"{
+    owners = ["679593333241"]
     most_recent = true
 
     filter {
     name   = "name"
-    values = ["RHEL-9-DevOps-Practice"]
+    values = ["OpenVPN Access Server Community Image-8fbe3379-63b6-43e8-87bd-0e93fd7be8f3"]
   }
 
   filter {
@@ -19,8 +19,8 @@ data "aws_ami" "ourami"{
 }
 
 
-data "aws_ssm_parameter" "bastion_sg_id" {
-  name = "/${var.project}/${var.environment}/bastion_sg_id"
+data "aws_ssm_parameter" "vpn_sg_id" {
+  name = "/${var.project}/${var.environment}/vpn_sg_id"
 }
 
 data "aws_ssm_parameter" "public_subnet_ids" {
