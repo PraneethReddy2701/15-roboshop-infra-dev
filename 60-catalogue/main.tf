@@ -1,8 +1,10 @@
+# create target group
 resource "aws_lb_target_group" "catalogue" {
   name     = "${var.project}-${var.environment}-catalogue"
   port     = 8080
   protocol = "HTTP"
   vpc_id   = local.vpc_id
+  deregistration_delay = 120
 
   health_check {
     healthy_threshold = 2
@@ -15,6 +17,7 @@ resource "aws_lb_target_group" "catalogue" {
   }
 }
 
+# create instance
 resource "aws_instance" "catalogue" {
   ami           = local.ami_id
   instance_type = var.instance_type
@@ -30,6 +33,7 @@ resource "aws_instance" "catalogue" {
   )
 }
 
+# null resource to configure the instance
 resource "terraform_data" "catalogue" {
   triggers_replace = [
     aws_instance.catalogue.id
@@ -50,7 +54,41 @@ resource "terraform_data" "catalogue" {
   provisioner "remote-exec" {
     inline = [ 
       "chmod +x /tmp/catalogue.sh",
-      "sudo sh /tmp/catalogue.sh catalogue"
+      "sudo sh /tmp/catalogue.sh catalogue ${var.environment}"
     ]
   }
+}
+
+# stop instance
+resource "aws_ec2_instance_state" "catalogue" {
+  instance_id = aws_instance.catalogue.id
+  state       = "stopped"
+  depends_on = [ terraform_data.catalogue ]
+}
+
+# take AMI
+resource "aws_ami_from_instance" "catalogue" {
+  name               = "${var.project}-${var.environment}-catalogue"
+  source_instance_id = aws_instance.catalogue.id
+  depends_on = [ aws_ec2_instance_state.catalogue ]
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "${var.project}-${var.environment}-catalogue"
+    }
+  )
+}
+
+# delete the instance
+resource "terraform_data" "catalogue_delete" {
+  triggers_replace = [
+    aws_instance.catalogue.id
+  ]
+  
+  #make sure you have aws-configure in your laptop
+  provisioner "local-exec" {
+   command = "aws ec2 terminate-instances --instance-ids ${aws_instance.catalogue.id}"
+  }
+
+  depends_on = [ aws_ami_from_instance.catalogue ]
 }
