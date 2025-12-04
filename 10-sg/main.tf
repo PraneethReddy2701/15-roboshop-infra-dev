@@ -226,3 +226,74 @@ resource "aws_security_group_rule" "rabbitmq_vpn_ssh" {
   source_security_group_id = module.vpn.sg_id
   security_group_id = module.rabbitmq.sg_id
 }
+
+#security groups for catalogue
+module "catalogue" {
+  source = "git::https://github.com/PraneethReddy2701/16-terraform-aws-security-group-module.git?ref=main"
+  project = var.project
+  environment = var.environment
+
+  sg_name        = var.catalogue_sg_name
+  sg_description = var.catalogue_sg_description
+  vpc_id = local.vpc_id
+}
+
+# catalogue accepting connections from backed-alb on port 8080
+resource "aws_security_group_rule" "catalogue_backend-alb" {
+  type              = "ingress"
+  from_port         = 8080
+  to_port           = 8080
+  protocol          = "tcp"
+  source_security_group_id = module.backend-alb.sg_id
+  security_group_id = module.catalogue.sg_id
+}
+
+# catalogue accepting connections from vpn on port 22
+resource "aws_security_group_rule" "catalogue_vpn_ssh" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  source_security_group_id = module.vpn.sg_id
+  security_group_id = module.catalogue.sg_id
+}
+
+# catalogue accepting connections from vpn on port 8080
+resource "aws_security_group_rule" "catalogue_vpn_http" {
+  type              = "ingress"
+  from_port         = 8080
+  to_port           = 8080
+  protocol          = "tcp"
+  source_security_group_id = module.vpn.sg_id
+  security_group_id = module.catalogue.sg_id
+}
+
+# catalogue accepting connections from bastion on port 22
+resource "aws_security_group_rule" "catalogue_bastion_ssh" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  source_security_group_id = module.bastion.sg_id
+  security_group_id = module.catalogue.sg_id
+}
+
+# catalogue accepting connections from bastion on port 8080
+resource "aws_security_group_rule" "catalogue_bastion" {
+  type              = "ingress"
+  from_port         = 8080
+  to_port           = 8080
+  protocol          = "tcp"
+  source_security_group_id = module.bastion.sg_id
+  security_group_id = module.catalogue.sg_id
+}
+
+# mongodb accepting connections from catalogue on port 27017
+resource "aws_security_group_rule" "mongodb_catalogue" {
+  type              = "ingress"
+  from_port         = 27017
+  to_port           = 27017
+  protocol          = "tcp"
+  source_security_group_id = module.catalogue.sg_id
+  security_group_id = module.mongodb.sg_id
+}

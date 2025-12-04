@@ -13,7 +13,6 @@ resource "aws_instance" "mongodb" {
   )
 }
 
-
 # we have created the instance above , now we need to copy the script and execut it (i.e,through ansible roles) using remote-exec
 resource "terraform_data" "mongodb" {
   triggers_replace = [
@@ -40,6 +39,17 @@ resource "terraform_data" "mongodb" {
   }
 }
 
+# r53 record
+resource "aws_route53_record" "mongodb" {
+  zone_id = var.zone_id
+  name    = "mongodb.${var.zone_name}"
+  type    = "A"
+  ttl     = 1
+  records = [aws_instance.mongodb.private_ip]
+  allow_overwrite = true
+}
+
+
 
 resource "aws_instance" "redis" {
   ami           = local.ami_id
@@ -55,7 +65,6 @@ resource "aws_instance" "redis" {
 
   )
 }
-
 
 # we have created the instance above , now we need to copy the script and execut it (i.e,through ansible roles) using remote-exec
 resource "terraform_data" "redis" {
@@ -83,12 +92,24 @@ resource "terraform_data" "redis" {
   }
 }
 
+# r53 record
+resource "aws_route53_record" "redis" {
+  zone_id = var.zone_id
+  name    = "redis.${var.zone_name}"
+  type    = "A"
+  ttl     = 1
+  records = [aws_instance.redis.private_ip]
+  allow_overwrite = true
+}
+
+
 
 resource "aws_instance" "mysql" {
   ami           = local.ami_id
   instance_type = var.instance_type
   vpc_security_group_ids = [local.mysql_sg_id]
   subnet_id = local.database_subnet_id
+  iam_instance_profile = "Ec2ToFetchSSMParameters"
 
   tags = merge(
     local.common_tags,
@@ -98,7 +119,6 @@ resource "aws_instance" "mysql" {
 
   )
 }
-
 
 # we have created the instance above , now we need to copy the script and execut it (i.e,through ansible roles) using remote-exec
 resource "terraform_data" "mysql" {
@@ -126,6 +146,18 @@ resource "terraform_data" "mysql" {
   }
 }
 
+# r53 record
+resource "aws_route53_record" "mysql" {
+  zone_id = var.zone_id
+  name    = "mysql.${var.zone_name}"
+  type    = "A"
+  ttl     = 1
+  records = [aws_instance.mysql.private_ip]
+  allow_overwrite = true
+}
+
+
+
 resource "aws_instance" "rabbitmq" {
   ami           = local.ami_id
   instance_type = var.instance_type
@@ -140,7 +172,6 @@ resource "aws_instance" "rabbitmq" {
 
   )
 }
-
 
 # we have created the instance above , now we need to copy the script and execut it (i.e,through ansible roles) using remote-exec
 resource "terraform_data" "rabbitmq" {
@@ -166,4 +197,14 @@ resource "terraform_data" "rabbitmq" {
       "sudo sh /tmp/bootstrap.sh rabbitmq"
     ]
   }
+}
+
+# r53 record
+resource "aws_route53_record" "rabbitmq" {
+  zone_id = var.zone_id
+  name    = "rabbitmq.${var.zone_name}"
+  type    = "A"
+  ttl     = 1
+  records = [aws_instance.rabbitmq.private_ip]
+  allow_overwrite = true
 }

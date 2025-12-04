@@ -11,8 +11,6 @@ module "backend-alb" {
   version = "9.16.0"
   enable_deletion_protection = false
 
- 
-
   tags = merge(
     local.common_tags,
     {
@@ -35,5 +33,17 @@ resource "aws_lb_listener" "backend-alb" {
       message_body = "<h1> Hi I am from backend-alb <h1>"
       status_code  = "200"
     }
+  }
+}
+
+resource "aws_route53_record" "backend-alb" {
+  zone_id = var.zone_id
+  name    = "*.backend-dev.${var.zone_name}"
+  type    = "A"
+
+  alias {
+    name                   = module.backend-alb.dns_name
+    zone_id                = module.backend-alb.zone_id  # this is the Zone ID of ALB
+    evaluate_target_health = true
   }
 }
