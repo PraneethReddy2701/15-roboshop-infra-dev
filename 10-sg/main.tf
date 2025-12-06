@@ -193,7 +193,7 @@ resource "aws_security_group_rule" "rabbitmq_vpn" {
   security_group_id = module.rabbitmq.sg_id
 }
 
-# rabbitmq accepting connections from vpn on port 22, 5672
+# rabbitmq accepting connections from bastion on port 22, 5672
 resource "aws_security_group_rule" "rabbitmq_bastion" {
   count = length(var.rabbitmq_bastion_ports)
   type              = "ingress"
@@ -592,6 +592,7 @@ resource "aws_security_group_rule" "backend-alb_payment" {
 }
 
 
+# security group for frontend
 module "frontend" {
 # source = "../../16-terraform-aws-security-group-module"
   source = "git::https://github.com/PraneethReddy2701/16-terraform-aws-security-group-module.git?ref=main"
@@ -735,16 +736,3 @@ resource "aws_security_group_rule" "vpn_943" {
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = module.vpn.sg_id
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
