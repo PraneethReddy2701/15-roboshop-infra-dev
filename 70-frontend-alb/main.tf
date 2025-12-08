@@ -40,7 +40,7 @@ resource "aws_lb_listener" "frontend-alb" {
 
 resource "aws_route53_record" "frontend-alb" {
   zone_id = var.zone_id
-  name    = "*.${var.zone_name}"  # *.bittu27.site
+  name    = "${var.environment}.${var.zone_name}"  # dev.bittu27.site
   type    = "A"
 
   alias {
