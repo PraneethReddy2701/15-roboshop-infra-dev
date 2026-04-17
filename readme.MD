@@ -211,12 +211,4 @@ This project can be used as a reference for:
 - Microservices-based architecture for independent scaling  
 - Secure network design with private subnets  
 - Auto scaling based on CPU utilization  
-- Centralized configuration using Parameter Store  
-
-## 📫 Author
-
-**Praneeth Reddy**
-DevOps Engineer
-
-* 📍 Hyderabad, India
-* 🔗 LinkedIn: https://linkedin.com/in/praneeth-reddy-kotholla
+- Centralized configuration using Parameter Store
