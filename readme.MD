@@ -1,17 +1,42 @@
-# 🚀 Roboshop Infrastructure (Dev Environment)
+# 🚀 Roboshop Infrastructure Setup
 
 ## 📌 Overview
 
-This repository provisions a **complete microservices-based infrastructure on AWS using Terraform**, designed to simulate a real-world e-commerce platform.
+This repository provisions a **scalable microservices-based infrastructure on AWS using Terraform**, designed to simulate a real-world e-commerce platform.
 
 The architecture focuses on **scalability, secure networking, and modular infrastructure**, enabling independent service deployment and efficient traffic routing across components.
+
+---
+
+## 💡 What This Project Solves
+
+- Demonstrates a real-world microservices infrastructure setup on AWS  
+- Shows how to implement path-based routing using ALB  
+- Provides a scalable backend using Auto Scaling Groups  
+- Implements secure networking with private subnets, Bastion, and VPN  
+- Uses Infrastructure as Code (Terraform) for repeatable deployments  
+
+---
+
+## ⚙️ Key Highlights
+
+* Multi-tier architecture (Frontend → Backend → Database)
+* Path-based routing using ALB
+* Auto Scaling based on CPU utilization
+* Secure infrastructure with private subnets, VPN, and Bastion
+* Modular Terraform design
+* Configuration managed via Parameter Store
+* CDN integration for performance optimization
 
 ---
 
 ## 🏗 Architecture
 
 <!-- ![Architecture Diagram](./architecture.png) -->
-![Architecture Diagram](./roboshop-infra-dev.svg)
+<!-- ![Architecture Diagram](./roboshop-infra-dev.svg) -->
+<p align="center">
+  <img src="./roboshop-infra-dev.svg" alt="Architecture Diagram" width="900"/>
+</p>
 
 ---
 
@@ -49,7 +74,6 @@ The architecture focuses on **scalability, secure networking, and modular infras
 
 * Backend and database instances are deployed in **private subnets**
 * **Bastion Host** for controlled SSH access
-* **VPN access** for secure connectivity
 * Security groups enforce **layered access control**
 
 ---
@@ -87,24 +111,6 @@ The architecture focuses on **scalability, secure networking, and modular infras
   * Service installation
   * Configuration
   * Deployment
-
----
-
-### 🧩 Microservices
-
-The backend is composed of independently deployable services:
-
-* Catalogue
-* User
-* Cart
-* Shipping
-* Payment
-
-This architecture enables:
-
-* Loose coupling
-* Independent scaling
-* Flexible deployments
 
 ---
 
@@ -167,18 +173,6 @@ This architecture enables:
 
 ---
 
-## ⚙️ Key Highlights
-
-* Multi-tier architecture (Frontend → Backend → Database)
-* Path-based routing using ALB
-* Auto Scaling based on CPU utilization
-* Secure infrastructure with private subnets, VPN, and Bastion
-* Modular Terraform design
-* Configuration managed via Parameter Store
-* CDN integration for performance optimization
-
----
-
 ## 🚀 Deployment Steps
 
 ```bash
@@ -199,6 +193,25 @@ terraform apply
 * Appropriate IAM permissions
 
 ---
+
+## 🎯 Use Case
+
+This project can be used as a reference for:
+
+- Designing scalable microservices infrastructure  
+- Learning Terraform-based infrastructure provisioning  
+- Understanding ALB routing and auto scaling in AWS  
+- Implementing secure multi-tier architecture  
+
+---
+
+## 📌 Design Principles
+
+- Modular infrastructure using Terraform modules  
+- Microservices-based architecture for independent scaling  
+- Secure network design with private subnets  
+- Auto scaling based on CPU utilization  
+- Centralized configuration using Parameter Store  
 
 ## 📫 Author
 
